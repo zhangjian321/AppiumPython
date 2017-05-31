@@ -123,4 +123,4 @@ if __name__ == '__main__':
     # suite.addTest(TestWooplus('test_swipe_cards'))
     # suite.addTest(TestWooplus('test_send_message'))
     # unittest.TextTestRunner.run(suite)
-
+print('This is a test.')
