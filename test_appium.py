@@ -108,18 +108,12 @@ class TestWooplus(unittest.TestCase):
         return width, height
 
     def is_element_exist(self, ca, string):
-        try:
-            if ca == 'id':
-                e = self.driver.find_element_by_id(string)
-            elif ca == 'name':
-                e = self.driver.find_element_by_name(string)
-            return True
-        except Exception:
+        if ca == 'id':
+            return self.driver.find_element_by_id(string).is_displayed()
+        elif ca == 'name':
+            return self.driver.find_element_by_name(string).is_displayed()
+        else:
             return False
-
-    # def test_number(self):
-    #     self.test_login()
-    #     self.test_swipe_cards()
 
 if __name__ == '__main__':
     unittest.main()  # 该方法执行会让测试用例按照数字和大小写字母来顺序执行
