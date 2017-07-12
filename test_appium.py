@@ -1,32 +1,35 @@
 # coding = utf-8
 
-'''
+"""
 Created on: 2017-5-27
 Author: Albert
 Project：Wooplus
-'''
+"""
 
 import unittest
+import my_testRunner
 from appium import webdriver
 from time import sleep
 from selenium.webdriver.support.ui import WebDriverWait
 
 
 class TestWooplus(unittest.TestCase):
+    # 在测试用例执行之前就开始初始化的操作
     @classmethod
     def setUpClass(self):
         desired_caps = {'platformName': 'Android',
-                        'platformVersion': '5.0',
-                        'deviceName': '167850c8',
-                        'app': 'D:\\android测试版\\304(47_5.2.3).apk',
+                        'platformVersion': '6.0',
+                        'deviceName': '192.168.163.101:5555',
+                        'app': 'C:\\Users\\admin\Desktop\\apk\\304(47_5.2.3).apk',
                         'appPackage': 'com.mason.wooplus',
                         'appActivity': '.activity.SplashActivity',
                         'unicodeKeyboard': True,
                         'resetKeyboard': True,
                         'noReset': True}
         self.driver = webdriver.Remote('http://127.0.0.1:4723/wd/hub', desired_caps)
-        self.driver.implicitly_wait(5)  # 隐式等待，在查找元素时也会以5秒来作为超市等待
+        self.driver.implicitly_wait(5)  # 隐式等待，在查找元素时也会以5秒来作为超时等待
 
+    # 在所有的测试用例执行完才执行收尾工作
     @classmethod
     def tearDownClass(self):
         self.driver.quit()
@@ -49,11 +52,14 @@ class TestWooplus(unittest.TestCase):
         sleep(10)
         # 判断是否登陆成功
         if self.is_element_exist('name', 'OK, Let\'s Go') or self.is_element_exist('id', 'com.mason.wooplus:id/me'):
+            success_login = True
             print('test_1_login is done.')
         else:
-            raise Exception('Login is failed.')
+            success_login = False
+        self.assertEqual(success_login, True)  # 断言登陆成功
 
     # 测试左右滑动cards
+    # @unittest.skip
     def test_2_swipe_cards(self):
         sleep(10)
         self.swipe_left(1000)
@@ -67,6 +73,10 @@ class TestWooplus(unittest.TestCase):
     def test_3_send_message(self):
         driver = self.driver
         driver.find_element_by_android_uiautomator('new UiSelector().resourceId("com.mason.wooplus:id/message")').click()
+        # 不到万不得已的时候不要使用xpath来定位元素
+        # driver.find_element_by_xpath('//android.support.v7.widget.RecyclerView[1]/android.widget.RelativeLayout['
+        #                              '1]/android.widget.LinearLayout').click()
+        # driver.find_element_by_xpath('//android.widget.RelativeLayout[contains(@index,3)]').click()
         driver.find_elements_by_id('com.mason.wooplus:id/header')[0].click()
         driver.find_element_by_id('com.mason.wooplus:id/rc_edit_text').send_keys('Hello!')
         driver.find_element_by_android_uiautomator('new UiSelector().resourceId("com.mason.wooplus:id/rc_send_toggle")').click()
@@ -97,9 +107,6 @@ class TestWooplus(unittest.TestCase):
         height = self.driver.get_window_size()['height']
         return width, height
 
-    def logout(self):
-        driver = self.driver
-
     def is_element_exist(self, ca, string):
         try:
             if ca == 'id':
@@ -128,4 +135,5 @@ if __name__ == '__main__':
     # suite.addTest(TestWooplus('test_1_login'))
     # suite.addTest(TestWooplus('test_2_swipe_cards'))
     # unittest.TextTestRunner(verbosity=2).run(suite)  # suite中的TestCase也会按照数字和大小写字母来顺序执行
+
 
