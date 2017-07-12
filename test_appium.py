@@ -115,12 +115,17 @@ class TestWooplus(unittest.TestCase):
     #     self.test_swipe_cards()
 
 if __name__ == '__main__':
-    # suite = unittest.TestLoader().loadTestsFromTestCase(TestWooplus)
-    # unittest.TextTestRunner(verbosity=2).run(suite)
     unittest.main()  # 该方法执行会让测试用例按照数字和大小写字母来顺序执行
-    # suite = unittest.TestSuite()  # 这种方法可以自由定义用例执行的顺序
-    # suite.addTest(TestWooplus('test_login'))
-    # suite.addTest(TestWooplus('test_swipe_cards'))
-    # suite.addTest(TestWooplus('test_send_message'))
-    # unittest.TextTestRunner.run(suite)
-print('This is a test.')
+
+    # # 直接将一个模块中的所有用例放在一个用例集合中，多个模块多个集合
+    # cases_TestWooplus = unittest.TestLoader().loadTestsFromTestCase(TestWooplus)
+    # cases_TestOne = unittest.TestLoader().loadTestsFromTestCase(my_testRunner.TestOne)
+    # suite = unittest.TestSuite([cases_TestWooplus, cases_TestOne])  # 将两个小集合中的用例集中放在一个大集合中，便于一起执行
+    # suite.addTest(my_testRunner.TestOne('Test_2'))  # 这里将一个模块中的某一个用例再添加到大集合中，就会再执行一遍
+    # unittest.TextTestRunner(verbosity=2).run(suite)
+
+    # suite = unittest.TestSuite()  # 这种方法用于有选择的执行测试用例，最好不要去注释测试用例
+    # suite.addTest(TestWooplus('test_1_login'))
+    # suite.addTest(TestWooplus('test_2_swipe_cards'))
+    # unittest.TextTestRunner(verbosity=2).run(suite)  # suite中的TestCase也会按照数字和大小写字母来顺序执行
+
